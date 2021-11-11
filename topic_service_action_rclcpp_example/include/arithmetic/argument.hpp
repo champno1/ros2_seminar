@@ -15,8 +15,8 @@
 #ifndef ARITHMETIC__ARGUMENT_HPP_
 #define ARITHMETIC__ARGUMENT_HPP_
 
-#include <chrono>
-#include <memory>
+#include <chrono> //time manipulation library
+#include <memory> //dynamic memory manipulation library
 #include <string>
 #include <utility>
 
@@ -25,24 +25,24 @@
 #include "msg_srv_action_interface_example/msg/arithmetic_argument.hpp"
 
 
-class Argument : public rclcpp::Node
+class Argument : public rclcpp::Node  //Argument class is a subclass of Node class
 {
 public:
   using ArithmeticArgument = msg_srv_action_interface_example::msg::ArithmeticArgument;
 
-  explicit Argument(const rclcpp::NodeOptions & node_options = rclcpp::NodeOptions());
+  explicit Argument(const rclcpp::NodeOptions & node_options = rclcpp::NodeOptions());  //Constructor. get node option input(context, arguments, intra-process comm, parameter, allocator etc.).
   virtual ~Argument();
 
 private:
   void publish_random_arithmetic_arguments();
   void update_parameter();
 
-  float min_random_num_;
-  float max_random_num_;
+  float min_random_num_;  //to limit sampling range of topic data
+  float max_random_num_;  //to limit sampling range of topic data
 
-  rclcpp::Publisher<ArithmeticArgument>::SharedPtr arithmetic_argument_publisher_;
-  rclcpp::TimerBase::SharedPtr timer_;
-  rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_sub_;
-  rclcpp::AsyncParametersClient::SharedPtr parameters_client_;
+  rclcpp::Publisher<ArithmeticArgument>::SharedPtr arithmetic_argument_publisher_;  //Publisher member variable with smartpointer type
+  rclcpp::TimerBase::SharedPtr timer_;  //Timer member variable with smartpointer type
+  rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_sub_;  //subscriber to get parameter event
+  rclcpp::AsyncParametersClient::SharedPtr parameters_client_;  //parament client
 };
 #endif  // ARITHMETIC__ARGUMENT_HPP_

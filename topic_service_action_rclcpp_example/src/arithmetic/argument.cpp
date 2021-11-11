@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstdio>
-#include <memory>
+#include <cstdio> //standard io library for c++
+#include <memory> //dynamic memory library
 #include <string>
 #include <utility>
-#include <random>
+#include <random> //library to make random number
 
 #include "rclcpp/rclcpp.hpp"
-#include "rcutils/cmdline_parser.h"
+#include "rcutils/cmdline_parser.h" //ros library for management execution argument
 
 #include "arithmetic/argument.hpp"
 
 using namespace std::chrono_literals;
 
-Argument::Argument(const rclcpp::NodeOptions & node_options)
+Argument::Argument(const rclcpp::NodeOptions & node_options)  //constructor. node name : "argument"
 : Node("argument", node_options),
   min_random_num_(0.0),
   max_random_num_(0.0)
@@ -39,13 +39,13 @@ Argument::Argument(const rclcpp::NodeOptions & node_options)
   this->update_parameter();
 
   const auto QOS_RKL10V =
-    rclcpp::QoS(rclcpp::KeepLast(qos_depth)).reliable().durability_volatile();
+    rclcpp::QoS(rclcpp::KeepLast(qos_depth)).reliable().durability_volatile();  //QOS Setting
 
   arithmetic_argument_publisher_ =
-    this->create_publisher<ArithmeticArgument>("arithmetic_argument", QOS_RKL10V);
+    this->create_publisher<ArithmeticArgument>("arithmetic_argument", QOS_RKL10V);  //topic name : "arithmetic_argmument"
 
   timer_ =
-    this->create_wall_timer(1s, std::bind(&Argument::publish_random_arithmetic_arguments, this));
+    this->create_wall_timer(1s, std::bind(&Argument::publish_random_arithmetic_arguments, this)); //create timer and register callback function
 }
 
 Argument::~Argument()
@@ -62,7 +62,7 @@ void Argument::publish_random_arithmetic_arguments()
   msg.stamp = this->now();
   msg.argument_a = distribution(gen);
   msg.argument_b = distribution(gen);
-  arithmetic_argument_publisher_->publish(msg);
+  arithmetic_argument_publisher_->publish(msg); //publish message
 
   RCLCPP_INFO(this->get_logger(), "Published argument_a %.2f", msg.argument_a);
   RCLCPP_INFO(this->get_logger(), "Published argument_b %.2f", msg.argument_b);
